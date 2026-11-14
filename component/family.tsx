@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { couple, side } from "@/assets";
+import { familyData, type FamilyCardData } from "@/component/data";
 
 /* corner ornament: ek hi SVG, rotate karke chaaron corners par */
 function Corner({ className = "" }: { className?: string }) {
@@ -25,16 +26,17 @@ function Divider() {
   );
 }
 
-type CardProps = {
-  hindi: string;
-  label: string;
-  family: string;
-  parentsTitle: string;
-  parents: string;
-  grandparents: string;
-};
+type CardProps = FamilyCardData & { grandparentsTitle: string };
 
-function FamilyCard({ hindi, label, family, parentsTitle, parents, grandparents }: CardProps) {
+function FamilyCard({
+  hindi,
+  label,
+  family,
+  parentsTitle,
+  parents,
+  grandparentsTitle,
+  grandparents,
+}: CardProps) {
   return (
     <div className="relative rounded-sm border-2 border-[#8a6a35] bg-gradient-to-b from-[#fffaf0] to-[#f6e8d0] p-2 shadow-[0_18px_40px_rgba(94,18,36,0.25)]">
       <div className="relative border border-[#c9a36a] px-6 pb-9 pt-11 text-center">
@@ -58,7 +60,7 @@ function FamilyCard({ hindi, label, family, parentsTitle, parents, grandparents 
 
         <div className="mx-auto my-5 h-px w-16 bg-[#a67c3a]/40" />
 
-        <p className="text-xs uppercase tracking-wider text-[#8a6a35]">Grandparents</p>
+        <p className="text-xs uppercase tracking-wider text-[#8a6a35]">{grandparentsTitle}</p>
         <p className="mt-1 font-heading text-lg text-[#3a0a16]/90">{grandparents}</p>
       </div>
     </div>
@@ -85,15 +87,16 @@ export default function Family() {
   return (
     <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#f8efe0] to-[#f1e0c4] px-6 py-8 text-[#3a0a16] sm:p-14">
       <Image
-          src={side}
-          alt="Decorative side ornament"
-          className="absolute left-[-4%] -top-6 sm:h-90 h-36 w-max object-contain "
-        />
-         <Image
-          src={side}
-          alt="Decorative side ornament"
-          className="absolute right-[-4%] -top-6 sm:h-90 h-36 w-max object-contain scale-x-[-1]"
-        />
+        src={side}
+        alt={familyData.sideAlt}
+        className="absolute left-[-4%] -top-6 sm:h-90 h-36 w-max object-contain "
+      />
+      <Image
+        src={side}
+        alt={familyData.sideAlt}
+        className="absolute right-[-4%] -top-6 sm:h-90 h-36 w-max object-contain scale-x-[-1]"
+      />
+
       {/* ---------- HEADER ---------- */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -103,14 +106,14 @@ export default function Family() {
         className="relative mx-auto flex max-w-3xl flex-col items-center text-center"
       >
         <p className="text-[11px] tracking-[0.3em] text-[#5e1224]/70">
-          WITH THE BLESSINGS OF OUR ELDERS
+          {familyData.eyebrow}
         </p>
         <h2 className="mt-2 font-heading text-4xl font-bold tracking-[0.06em] text-[#5e1224] sm:text-5xl">
-          Our Families
+          {familyData.heading}
         </h2>
         <Divider />
         <p className="max-w-xl text-sm leading-relaxed text-[#3a0a16]/80 sm:text-base">
-          Two families come together to celebrate love, tradition, and a beautiful new beginning.
+          {familyData.description}
         </p>
       </motion.div>
 
@@ -124,12 +127,8 @@ export default function Family() {
           className="order-2 lg:order-1"
         >
           <FamilyCard
-            hindi="वर पक्ष"
-            label="GROOM&apos;S FAMILY"
-            family="The Sharma Family"
-            parentsTitle="Parents of the Groom"
-            parents="Mrs. Sunita & Mr. Rajesh Sharma"
-            grandparents="Late Smt. & Shri Rameshwar Sharma"
+            {...familyData.groom}
+            grandparentsTitle={familyData.grandparentsTitle}
           />
         </motion.div>
 
@@ -146,7 +145,7 @@ export default function Family() {
               <div className="h-full w-full overflow-hidden rounded-full border-2 border-[#a67c3a]">
                 <Image
                   src={couple}
-                  alt="Nikhil and Ritika"
+                  alt={familyData.coupleAlt}
                   className="h-full w-full object-cover scale-x-[-1] rounded-full  transition-transform duration-700 ease-out group-hover:scale-105"
                 />
               </div>
@@ -162,12 +161,8 @@ export default function Family() {
           className="order-3"
         >
           <FamilyCard
-            hindi="वधू पक्ष"
-            label="BRIDE&apos;S FAMILY"
-            family="The Verma Family"
-            parentsTitle="Parents of the Bride"
-            parents="Mrs. Anita & Mr. Suresh Verma"
-            grandparents="Smt. & Shri Harish Chandra Verma"
+            {...familyData.bride}
+            grandparentsTitle={familyData.grandparentsTitle}
           />
         </motion.div>
       </div>

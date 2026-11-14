@@ -1,33 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image, { type StaticImageData } from "next/image";
+import Image from "next/image";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { tilak, haldi, mehndi, wedding } from "@/assets";
+import { eventsData, type EventItem } from "@/component/data";
 
-/* ✏️ Time aur venue yahin se badlo */
-const VENUE = "The Grand Pavilion, Civil Lines, Delhi, India";
+const { venue, items: events, labels } = eventsData;
 
-type EventItem = {
-  id: string;
-  name: string;
-  hindi: string;
-  img: StaticImageData;
-  day: string;
-  month: string;
-  year: string;
-  weekday: string;
-  time: string;
-};
-
-const events: EventItem[] = [
-  { id: "tilak", name: "Tilak", hindi: "तिलक", img: tilak, day: "29", month: "JAN", year: "2027", weekday: "Friday", time: "11:00 AM onwards" },
-  { id: "haldi", name: "Haldi", hindi: "हल्दी", img: haldi, day: "01", month: "FEB", year: "2027", weekday: "Monday", time: "11:00 AM onwards" },
-  { id: "mehndi", name: "Mehndi", hindi: "मेहंदी", img: mehndi, day: "02", month: "FEB", year: "2027", weekday: "Tuesday", time: "4:00 PM onwards" },
-  { id: "wedding", name: "Wedding", hindi: "विवाह", img: wedding, day: "04", month: "FEB", year: "2027", weekday: "Thursday", time: "7:00 PM onwards" },
-];
-
-const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(VENUE)}`;
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue)}`;
 
 /* ---------- small ornaments ---------- */
 function Corner({ className = "" }: { className?: string }) {
@@ -83,7 +63,7 @@ function EventCard({
           >
             <Image
               src={e.img}
-              alt={`${e.name} illustration`}
+              alt={`${e.name} ${eventsData.imgAltSuffix}`}
               className="w-60 drop-shadow-[0_14px_20px_rgba(58,10,22,0.45)] md:w-94"
             />
           </motion.div>
@@ -113,19 +93,19 @@ function EventCard({
 
           <div className="mt-6 space-y-4">
             <div>
-              <p className="text-[11px] tracking-[0.25em] text-[#8a6a35]">TIME</p>
+              <p className="text-[11px] tracking-[0.25em] text-[#8a6a35]">{labels.time}</p>
               <p className="font-heading text-xl font-semibold text-[#3a0a16]">{e.time}</p>
             </div>
             <div>
-              <p className="text-[11px] tracking-[0.25em] text-[#8a6a35]">VENUE</p>
-              <p className="font-heading text-xl font-semibold text-[#3a0a16]">{VENUE}</p>
+              <p className="text-[11px] tracking-[0.25em] text-[#8a6a35]">{labels.venue}</p>
+              <p className="font-heading text-xl font-semibold text-[#3a0a16]">{venue}</p>
               <a
                 href={mapsUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-2 inline-block border-b border-[#5e1224]/50 text-xs tracking-[0.2em] text-[#5e1224] transition-colors hover:border-[#5e1224]"
               >
-                VIEW ON GOOGLE MAPS
+                {labels.maps}
               </a>
             </div>
           </div>
@@ -147,7 +127,7 @@ export default function Events() {
     <section className="relative w-full overflow-x-clip bg-gradient-to-b from-[#f8efe0] to-[#f1e0c4] px-6 pb-28 pt-36 text-[#3a0a16] sm:px-14">
       {/* dark (SaveTheDate) se smooth transition */}
 
-    <div className="relative mx-auto grid max-w-[90rem] items-start gap-16 lg:grid-cols-[1fr_40rem] lg:gap-x-[14rem]">
+      <div className="relative mx-auto grid max-w-[90rem] items-start gap-16 lg:grid-cols-[1fr_40rem] lg:gap-x-[14rem]">
         {/* ---------- LEFT: intro + menu ---------- */}
         <div className="lg:sticky lg:top-28">
           <motion.div
@@ -158,12 +138,11 @@ export default function Events() {
             className="text-center lg:text-left"
           >
             <h2 className="font-heading text-5xl font-bold tracking-[0.04em] text-[#5e1224] sm:text-6xl">
-              Events
+              {eventsData.heading}
             </h2>
             <MiniDivider className="my-5 justify-center lg:justify-start" />
             <p className="mx-auto max-w-md text-sm leading-relaxed text-[#3a0a16]/80 sm:text-base lg:mx-0">
-              Four days of rituals, music and blessings. Scroll through each ceremony to see
-              when and where it happens, or pick one from the list.
+              {eventsData.description}
             </p>
           </motion.div>
 
@@ -199,13 +178,12 @@ export default function Events() {
           </ul>
         </div>
 
-        {/* ---------- RIGHT: sticky stacking cards ---------- */}
-       {/* ---------- RIGHT: cards ---------- */}
-<div className="space-y-16 pt-12 md:pl-20 lg:space-y-12 lg:pl-0 lg:pt-0">
-  {events.map((ev) => (
-    <EventCard key={ev.id} e={ev} onActive={setActive} />
-  ))}
-</div>
+        {/* ---------- RIGHT: cards ---------- */}
+        <div className="space-y-16 pt-12 md:pl-20 lg:space-y-12 lg:pl-0 lg:pt-0">
+          {events.map((ev) => (
+            <EventCard key={ev.id} e={ev} onActive={setActive} />
+          ))}
+        </div>
       </div>
     </section>
   );

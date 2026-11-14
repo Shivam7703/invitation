@@ -9,20 +9,17 @@ import {
   useReducedMotion,
   type Variants,
 } from "framer-motion";
+import { saveTheDateData, calendarUrl } from "@/component/data";
 
-/* ✏️ Yahin se date badlo (month 0-based: Nov = 10) */
-const YEAR = 2027;
-const MONTH = 1;
-const DAY = 4;
-const WEDDING_ISO = "2027-01-04T18:00:00+05:30";
-const CALENDAR_URL =
-  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-  "&text=" + encodeURIComponent("Nikhil & Ritika Wedding") +
-  "&dates=20270104T123000Z/20270104T173000Z" + // 6:00 PM IST se 11:00 PM IST
-  "&details=" + encodeURIComponent("Join us in celebrating the wedding of Nikhil & Ritika.") +
-  "&location=" + encodeURIComponent("The Grand Pavilion, Civil Lines, Azamgarh, Uttar Pradesh");
+const {
+  year: YEAR,
+  month: MONTH,
+  day: DAY,
+  weddingISO,
+  weekdays: WEEKDAYS,
+  countdownLabels,
+} = saveTheDateData;
 
-const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 const monthName = new Date(YEAR, MONTH, 1).toLocaleString("en-US", { month: "long" });
 
 /* ---------------- Countdown (left) ---------------- */
@@ -33,12 +30,12 @@ function useCountdown() {
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);
-  const diff = now === null ? 0 : Math.max(0, new Date(WEDDING_ISO).getTime() - now);
+  const diff = now === null ? 0 : Math.max(0, new Date(weddingISO).getTime() - now);
   return [
-    { label: "Days", value: Math.floor(diff / 864e5) },
-    { label: "Hours", value: Math.floor(diff / 36e5) % 24 },
-    { label: "Minutes", value: Math.floor(diff / 6e4) % 60 },
-    { label: "Seconds", value: Math.floor(diff / 1e3) % 60 },
+    { label: countdownLabels[0], value: Math.floor(diff / 864e5) },
+    { label: countdownLabels[1], value: Math.floor(diff / 36e5) % 24 },
+    { label: countdownLabels[2], value: Math.floor(diff / 6e4) % 60 },
+    { label: countdownLabels[3], value: Math.floor(diff / 1e3) % 60 },
   ];
 }
 
@@ -160,22 +157,21 @@ function Calendar() {
                           transition={{ duration: 1.8, delay: 0.6, repeat: Infinity, ease: "easeOut" }}
                         />
                         {/* highlighted date */}
-                       {/* highlighted date */}
-<motion.span
-  initial={{ scale: 0, rotate: -90 }}
-  whileInView={{ scale: 1, rotate: 0 }}
-  viewport={{ once: true }}
-  animate={{ y: [0, -3, 0] }}
-  transition={{
-    scale: { type: "spring", stiffness: 200, damping: 12, delay: 1.1 },
-    rotate: { type: "spring", stiffness: 200, damping: 12, delay: 1.1 },
-    y: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-  }}
-  className="relative pb-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#7a1a30] to-[#4a0d1c] font-heading text-xl font-black text-[#e6c78f] shadow-[0_10px_18px_rgba(94,18,36,0.55)] ring-2 ring-[#c9a36a]"
-  style={{ z: 50 }}
->
-  {d}
-</motion.span>
+                        <motion.span
+                          initial={{ scale: 0, rotate: -90 }}
+                          whileInView={{ scale: 1, rotate: 0 }}
+                          viewport={{ once: true }}
+                          animate={{ y: [0, -3, 0] }}
+                          transition={{
+                            scale: { type: "spring", stiffness: 200, damping: 12, delay: 1.1 },
+                            rotate: { type: "spring", stiffness: 200, damping: 12, delay: 1.1 },
+                            y: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+                          }}
+                          className="relative pb-2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#7a1a30] to-[#4a0d1c] font-heading text-xl font-black text-[#e6c78f] shadow-[0_10px_18px_rgba(94,18,36,0.55)] ring-2 ring-[#c9a36a]"
+                          style={{ z: 50 }}
+                        >
+                          {d}
+                        </motion.span>
                       </>
                     ) : (
                       <span className="font-heading text-lg text-[#3a0a16]">{d}</span>
@@ -186,7 +182,7 @@ function Calendar() {
             </motion.div>
 
             <p className="mt-4 text-center font-heading text-lg italic text-[#5e1224]">
-              Thursday, 6:00 PM onwards
+              {saveTheDateData.calendarNote}
             </p>
           </div>
         </motion.div>
@@ -202,7 +198,6 @@ export default function SaveTheDate() {
 
   return (
     <section className="relative w-full overflow-hidden bg-linear-to-b from-[#3a0a16] via-[#4a0d1c] to-[#1a0509] px-6 py-8 text-[#f3e6d3] sm:p-16">
-
       <div className="relative mx-auto grid max-w-6xl items-center gap-16 lg:grid-cols-2">
         {/* ---------- LEFT: timer + button ---------- */}
         <motion.div
@@ -213,16 +208,16 @@ export default function SaveTheDate() {
           className="text-center lg:text-left"
         >
           <p className="text-[11px] tracking-[0.3em] text-[#f3e6d3]/70">
-            MARK YOUR CALENDAR
+            {saveTheDateData.eyebrow}
           </p>
           <h2
             className="mt-2 font-heading text-4xl font-bold tracking-[0.04em] text-[#c9a36a] sm:text-5xl"
             style={{ textShadow: "0 6px 20px rgba(0,0,0,0.6)" }}
           >
-            Save the Date
+            {saveTheDateData.heading}
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-[#f3e6d3]/80 sm:text-base lg:max-w-sm">
-            Our big day is almost here. Add it to your calendar so you don&apos;t miss a moment.
+            {saveTheDateData.description}
           </p>
 
           {/* timer */}
@@ -248,14 +243,14 @@ export default function SaveTheDate() {
 
           {/* button */}
           <motion.a
-            href={CALENDAR_URL}
+            href={calendarUrl}
             target="_blank"
             rel="noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.96 }}
             className="mt-10 inline-block rounded-sm bg-[#6b4513] px-8 py-3.5 text-xs tracking-[0.25em] text-[#e6c78f] shadow-[0_14px_30px_rgba(0,0,0,0.55)] transition-colors hover:bg-[#82561a]"
           >
-            SAVE THE DATE
+            {saveTheDateData.buttonText}
           </motion.a>
         </motion.div>
 

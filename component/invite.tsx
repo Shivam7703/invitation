@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { cpl, side } from "@/assets";
+import { inviteData } from "@/component/data";
 
 function Divider({ className = "" }: { className?: string }) {
   return (
@@ -74,7 +75,7 @@ export default function Invite() {
         >
           <Image
             src={cpl}
-            alt="Nikhil and Ritika"
+            alt={inviteData.coupleAlt}
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
             className="object-contain object-bottom drop-shadow-[0_20px_30px_rgba(0,0,0,0.6)]"
@@ -89,37 +90,39 @@ export default function Invite() {
           transition={{ duration: 1, ease }}
           className="order-1 flex flex-col justify-center px-6 pb-16 text-center sm:px-14 lg:order-2 lg:items-start lg:pb-24 lg:pl-8 lg:pr-14 lg:text-left"
         >
-          <p className="font-hindi text-2xl text-[#e6c78f]">सादर आमंत्रण</p>
+          <p className="font-hindi text-2xl text-[#e6c78f]">{inviteData.hindi}</p>
 
           <h2
             className="mt-3 font-heading text-5xl font-bold leading-[1.1] text-[#c9a36a] sm:text-6xl"
             style={{ textShadow: "0 8px 24px rgba(0,0,0,0.6)" }}
           >
-            You Are Warmly Invited
+            {inviteData.heading}
           </h2>
 
           <Divider className="my-6" />
 
-          <p className="max-w-lg text-base leading-relaxed text-[#f3e6d3]/90 sm:text-lg">
-            With hearts full of joy and the blessings of our elders, we invite you to
-            celebrate the beginning of our new journey together.
-          </p>
-          <p className="mt-4 max-w-lg text-base leading-relaxed text-[#f3e6d3]/90 sm:text-lg">
-            Your presence and your blessings will make our wedding truly special.
-            Come share the laughter, the rituals and the memories with us.
-          </p>
+          {inviteData.paragraphs.map((text, i) => (
+            <p
+              key={i}
+              className={`max-w-lg text-base leading-relaxed text-[#f3e6d3]/90 sm:text-lg ${
+                i > 0 ? "mt-4" : ""
+              }`}
+            >
+              {text}
+            </p>
+          ))}
 
           <p className="mt-8 font-heading text-2xl italic text-[#e6c78f]">
-            With love and gratitude,
+            {inviteData.signOff}
           </p>
           <p
             className="mt-1 font-heading text-3xl font-bold tracking-[0.06em] text-[#c9a36a]"
             style={{ textShadow: "0 6px 18px rgba(0,0,0,0.55)" }}
           >
-            NIKHIL &amp; RITIKA
+            {inviteData.names}
           </p>
           <p className="mt-2 text-[11px] tracking-[0.3em] text-[#f3e6d3]/70">
-            AND BOTH OUR FAMILIES
+            {inviteData.families}
           </p>
         </motion.div>
       </div>

@@ -2,28 +2,17 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { footerData, footerMapsUrl } from "@//component/data";
 
-/* ✏️ Saari details yahin se badlo (phone: country code ke saath, + aur space ke bina) */
-const COUPLE = "Nikhil & Ritika";
-const VENUE = "The Grand Pavilion, Civil Lines, Delhi, India";
-const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(VENUE)}`;
-
-const INVITED_BY = [
-    { side: "Groom's Family", names: "Mr. Rajesh & Mrs. Sunita Sharma" },
-    { side: "Bride's Family", names: "Mr. Suresh & Mrs. Anita Verma" },
-];
-
-const CONTACTS = [
-    { name: "Shivam Goyal", role: "Groom's Father", phone: "918218885483", display: "+91 8218885483" },
-    { name: "Shivam Goyal", role: "Bride's Father", phone: "918218885483", display: "+91 8218885483" },
-];
-
-const SCHEDULE = [
-    { name: "Tilak", date: "29 Jan 2027" },
-    { name: "Haldi", date: "1 Feb 2027" },
-    { name: "Mehndi", date: "2 Feb 2027" },
-    { name: "Wedding", date: "4 Feb 2027" },
-];
+const {
+    couple: COUPLE,
+    venue: VENUE,
+    contacts: CONTACTS,
+    schedule: SCHEDULE,
+    invitedBy: INVITED_BY,
+    buttons,
+    headings,
+} = footerData;
 
 const RSVP_PHONE = CONTACTS[0].phone;
 
@@ -60,13 +49,15 @@ export default function Footer() {
     };
 
     const shareOnWhatsApp = () => {
-        const text = `You are warmly invited to the wedding of ${COUPLE}. ${window.location.href}`;
+        const text = `${footerData.shareText} ${window.location.href}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
     };
 
     const rsvp = () => {
-        const text = `Hello! I would like to confirm my presence at ${COUPLE}'s wedding.`;
-        window.open(`https://wa.me/${RSVP_PHONE}?text=${encodeURIComponent(text)}`, "_blank");
+        window.open(
+            `https://wa.me/${RSVP_PHONE}?text=${encodeURIComponent(footerData.rsvpText)}`,
+            "_blank"
+        );
     };
 
     const btn =
@@ -85,16 +76,16 @@ export default function Footer() {
 
             {/* ---------- TOP: blessing + names ---------- */}
             <motion.div {...fade} className="relative mx-auto flex max-w-2xl flex-col items-center text-center">
-                <p className="font-hindi text-2xl text-[#e6c78f]">॥ शुभ विवाह ॥</p>
+                <p className="font-hindi text-2xl text-[#e6c78f]">{footerData.blessing}</p>
                 <h2
                     className="mt-5 font-script text-6xl text-[#c9a36a] sm:text-7xl"
                     style={{ textShadow: "0 8px 24px rgba(0,0,0,0.6)" }}
                 >
-                    Nikhil &amp; Ritika
+                    {COUPLE}
                 </h2>
                 <Divider className="my-6" />
                 <p className="max-w-md text-sm leading-relaxed text-[#f3e6d3]/80 sm:text-base">
-                    Thank you for being a part of our story. We can&apos;t wait to celebrate with you.
+                    {footerData.thanks}
                 </p>
             </motion.div>
 
@@ -105,10 +96,10 @@ export default function Footer() {
             >
                 {/* Contact */}
                 <div>
-                    <Heading>Contact Us</Heading>
+                    <Heading>{headings.contact}</Heading>
                     <ul className="mt-5 space-y-6">
                         {CONTACTS.map((c) => (
-                            <li key={c.phone}>
+                            <li key={c.role}>
                                 <p className="font-heading text-xl font-semibold text-[#f3e6d3]">{c.name}</p>
                                 <p className="text-xs tracking-[0.2em] text-[#f3e6d3]/60">{c.role.toUpperCase()}</p>
                                 <a
@@ -118,14 +109,14 @@ export default function Footer() {
                                     {c.display}
                                 </a>
                                 <div className="mt-2 flex justify-center gap-2 md:justify-start">
-                                    <a href={`tel:+${c.phone}`} className={btn}>CALL</a>
+                                    <a href={`tel:+${c.phone}`} className={btn}>{buttons.call}</a>
                                     <a
                                         href={`https://wa.me/${c.phone}`}
                                         target="_blank"
                                         rel="noreferrer"
                                         className={btn}
                                     >
-                                        WHATSAPP
+                                        {buttons.whatsapp}
                                     </a>
                                 </div>
                             </li>
@@ -135,23 +126,23 @@ export default function Footer() {
 
                 {/* Venue */}
                 <div>
-                    <Heading>Venue</Heading>
+                    <Heading>{headings.venue}</Heading>
                     <p className="mt-5 font-heading text-xl leading-snug text-[#f3e6d3]">{VENUE}</p>
                     <a
-                        href={MAPS_URL}
+                        href={footerMapsUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="mt-4 inline-block border-b border-[#c9a36a]/60 text-xs tracking-[0.22em] text-[#e6c78f] hover:border-[#e6c78f]"
                     >
-                        OPEN IN GOOGLE MAPS
+                        {buttons.maps}
                     </a>
-                    <p className="mt-8 text-xs tracking-[0.2em] text-[#f3e6d3]/60">WEDDING DAY</p>
-                    <p className="font-heading text-xl italic text-[#e6c78f]">Thursday, 4th February 2027</p>
+                    <p className="mt-8 text-xs tracking-[0.2em] text-[#f3e6d3]/60">{footerData.weddingDayLabel}</p>
+                    <p className="font-heading text-xl italic text-[#e6c78f]">{footerData.weddingDay}</p>
                 </div>
 
                 {/* Schedule */}
                 <div>
-                    <Heading>Celebrations</Heading>
+                    <Heading>{headings.schedule}</Heading>
                     <ul className="mt-5 space-y-3">
                         {SCHEDULE.map((s) => (
                             <li
@@ -169,7 +160,7 @@ export default function Footer() {
             {/* ---------- INVITED BY ---------- */}
             <motion.div {...fade} className="relative mx-auto mt-16 max-w-3xl text-center">
                 <Divider className="mb-8" />
-                <p className="text-[11px] tracking-[0.3em] text-[#f3e6d3]/60">WITH BEST COMPLIMENTS FROM</p>
+                <p className="text-[11px] tracking-[0.3em] text-[#f3e6d3]/60">{footerData.invitedByLabel}</p>
                 <div className="mt-5 grid gap-6 sm:grid-cols-2">
                     {INVITED_BY.map((f) => (
                         <div key={f.side}>
@@ -183,24 +174,24 @@ export default function Footer() {
                 <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
                     <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }} onClick={rsvp}
                         className="rounded-sm bg-[#6b4513] px-7 py-3 text-xs tracking-[0.25em] text-[#e6c78f] shadow-[0_14px_30px_rgba(0,0,0,0.55)] transition-colors hover:bg-[#82561a]">
-                        RSVP ON WHATSAPP
+                        {buttons.rsvp}
                     </motion.button>
                     <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }} onClick={shareOnWhatsApp} className={btn}>
-                        SHARE INVITE
+                        {buttons.share}
                     </motion.button>
                     <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.96 }} onClick={copyLink} className={btn} aria-live="polite">
-                        {copied ? "LINK COPIED" : "COPY LINK"}
+                        {copied ? buttons.copied : buttons.copy}
                     </motion.button>
                 </div>
 
                 <p className="mt-12 font-heading text-lg italic text-[#c9a36a]/80">
-                    A celebration of love &amp; togetherness
+                    {footerData.tagline}
                 </p>
             </motion.div>
 
             <div className="relative mx-auto mt-12 max-w-4xl border-t border-[#c9a36a]/20 pt-6 text-center">
                 <p className="text-[11px] tracking-[0.3em] text-[#f3e6d3]/50">
-                    © 2027 NIKHIL &amp; RITIKA · WITH LOVE, THE SHARMA &amp; VERMA FAMILIES
+                    {footerData.copyright}
                 </p>
             </div>
         </footer>

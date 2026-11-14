@@ -9,6 +9,7 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { ganesha, topright, bottomleft } from "@/assets";
+import { bannerData } from "@/component/data";
 
 const shadow = "drop-shadow-[0_12px_24px_rgba(0,0,0,0.65)]";
 
@@ -85,7 +86,6 @@ export default function Banner() {
 
       {/* ---------- CENTER CONTENT (no tilt) ---------- */}
       <div className="relative z-30 flex min-h-screen items-center justify-center px-6 py-16 sm:px-14">
-        
         <div className="flex flex-col items-center text-center">
           {/* Ganesha + moving circles */}
           <motion.div
@@ -122,25 +122,27 @@ export default function Banner() {
               animate={{ y: [0, -6, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
-            <Image
-  src={ganesha}
-  alt="Lord Ganesha"
-  className={`h-20 w-20 object-contain brightness-0 invert sm:h-24 sm:w-24 ${shadow}`}
-  priority
-/>
+              <Image
+                src={ganesha}
+                alt={bannerData.ganeshaAlt}
+                className={`h-20 w-20 object-contain brightness-0 invert sm:h-24 sm:w-24 ${shadow}`}
+                priority
+              />
             </motion.div>
           </motion.div>
-  <motion.p
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ delay: 0.5, duration: 1 }}
-  className="mt-5 text-base text-[#e6c78f] sm:text-xl"
-  style={{ textShadow: "0 6px 18px rgba(0,0,0,0.55)" }}
->
-  ॐ श्री गणेशाय नमः
-</motion.p>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="mt-5 text-base text-[#e6c78f] sm:text-xl"
+            style={{ textShadow: "0 6px 18px rgba(0,0,0,0.55)" }}
+          >
+            {bannerData.mantra}
+          </motion.p>
+
           <p className="mt-10 text-[11px] tracking-[0.3em] text-[#f3e6d3]/80">
-            TOGETHER WITH THEIR FAMILIES
+            {bannerData.intro}
           </p>
 
           {/* Names: ek hi line, bold */}
@@ -151,26 +153,26 @@ export default function Banner() {
             className="mt-6 flex items-baseline justify-center gap-3 whitespace-nowrap font-heading text-3xl font-bold leading-none tracking-[0.06em] text-[#c9a36a] sm:gap-5 sm:text-6xl md:text-7xl"
             style={{ textShadow: "0 8px 24px rgba(0,0,0,0.55)" }}
           >
-            <span>NIKHIL</span>
+            <span>{bannerData.groom}</span>
             <span className="text-xl font-medium italic tracking-normal text-[#e6c78f]/80 sm:text-4xl">
-              and
+              {bannerData.connector}
             </span>
-            <span>RITIKA</span>
+            <span>{bannerData.bride}</span>
           </motion.h1>
 
           <p className="mt-8 text-[11px] tracking-[0.3em] text-[#f3e6d3]/80">
-            INVITE YOU TO CELEBRATE THEIR WEDDING
+            {bannerData.inviteLine}
           </p>
 
           <div className="mt-6 flex items-center gap-4 font-heading text-[#c9a36a]">
-            <span className="text-lg tracking-widest">FEB</span>
+            <span className="text-lg tracking-widest">{bannerData.date.month}</span>
             <span className="h-8 w-px bg-[#c9a36a]/60" />
-            <span className="text-5xl font-light">04</span>
+            <span className="text-5xl font-light">{bannerData.date.day}</span>
             <span className="h-8 w-px bg-[#c9a36a]/60" />
-            <span className="text-lg tracking-widest">2027</span>
+            <span className="text-lg tracking-widest">{bannerData.date.year}</span>
           </div>
           <p className="mt-3 text-xs tracking-[0.2em] text-[#f3e6d3]/80">
-            THURSDAY | 6:00 PM ONWARDS
+            {bannerData.timing}
           </p>
         </div>
       </div>
